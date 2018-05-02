@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import './App.css';
 import DisplayWeather from './components/displayWeather';
 
-// get data on weather and store it, get location data and store it, render DisplayWeather component
-// and pass it data
+// get data on weather and store it, get location data and store it
+// render DisplayWeather component and pass it the data
 class App extends Component {
   constructor(props) {
     super(props);
@@ -12,8 +12,7 @@ class App extends Component {
       lat: "",
       lon: "",
       description: "",
-      temp: "",
-      changing: false
+      temp: ""
     }
     console.log("inicijalni state:", this.state);
   }
@@ -39,13 +38,12 @@ class App extends Component {
   
   getWeatherData() {
     // gets temperature and weather description for the given coordinates
-    const keyID = "4e51570e41fb01c6";
     fetch(`http://api.wunderground.com/api/4e51570e41fb01c6/conditions/q/${this.state.lat},${this.state.lon}.json`)
       .then(response => response.json())
       .then(data => {
         const temp = data.current_observation.temp_c;
         const description = data.current_observation.weather;
-        this.setState({ description, temp, changing: true });
+        this.setState({ description, temp });
       } )
       .then(() => console.log("state nakon weather fetch-a:", this.state));
   }
@@ -53,8 +51,11 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <p>sampletext</p>
-        
+        <DisplayWeather
+          city={this.state.city}
+          temp={this.state.temp}
+          description={this.state.description}
+        />
       </div>
     );
   }
